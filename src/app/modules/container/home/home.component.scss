@@ -1,0 +1,55 @@
+header {
+  width: 100%;
+  height: 84px;
+
+  .title {
+    left: 12px;
+    background-color: #e70012;
+    border-radius: 0 0 16px 16px;
+    display: flex;
+    width: 190px;
+    padding: 8px;
+    z-index: 1;
+    position: absolute;
+
+    mat-icon {
+      width: 60px;
+      height: 60px;
+      border: 4px solid white;
+      border-radius: 100%;
+    }
+
+    h1 {
+      width: 110px;
+      margin: auto auto auto 6px;
+      font-size: 28px;
+      letter-spacing: 2px;
+      text-align: center;
+      color: white;
+
+      $shadow-width: 1.5px;
+      $shadow-color: dimgray;
+      text-shadow: -#{$shadow-width} -#{$shadow-width} 0 $shadow-color,
+      #{$shadow-width} -#{$shadow-width} 0 $shadow-color,
+      -#{$shadow-width} #{$shadow-width} 0 $shadow-color,
+      #{$shadow-width} #{$shadow-width} 0 $shadow-color;
+    }
+  }
+
+  .nav-bar {
+    background-color: white;
+
+    ::ng-deep .mat-tab-nav-bar.mat-primary .mat-ink-bar {
+      background-color: deeppink;
+    }
+
+    nav {
+      padding-left: 218px;
+
+      [mat-tab-link] {
+        font-size: 18px;
+      }
+    }
+  }
+}
+
