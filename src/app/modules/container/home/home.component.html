@@ -6,10 +6,14 @@
 
   <div class="nav-bar">
     <nav mat-tab-nav-bar>
-      <a mat-tab-link routerLink="input-score" routerLinkActive #rla1="routerLinkActive" [active]="rla1.isActive">計算分數</a>
-      <a mat-tab-link routerLink="final-result" routerLinkActive #rla2="routerLinkActive" [active]="rla2.isActive">成果展示</a>
+      <a mat-tab-link routerLink="input-score" routerLinkActive #rla1="routerLinkActive"
+         [active]="rla1.isActive">計算分數</a>
+      <a mat-tab-link routerLink="final-result" routerLinkActive #rla2="routerLinkActive"
+         [active]="rla2.isActive">成果展示</a>
     </nav>
   </div>
 </header>
 
-<router-outlet></router-outlet>
+<div class="page-content">
+  <router-outlet></router-outlet>
+</div>
