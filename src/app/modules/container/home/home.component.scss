@@ -3,14 +3,15 @@ header {
   height: 84px;
 
   .title {
-    left: 12px;
-    background-color: #e70012;
-    border-radius: 0 0 16px 16px;
-    display: flex;
     width: 190px;
+    left: 12px;
     padding: 8px;
-    z-index: 1;
+    border-radius: 0 0 16px 16px;
+    box-shadow: 0.5px 2px 4px rgba(0, 0, 0, 0.3);
+    display: flex;
+    background-color: #e70012;
     position: absolute;
+    z-index: 1;
 
     mat-icon {
       width: 60px;
