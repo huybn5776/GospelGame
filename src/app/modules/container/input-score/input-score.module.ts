@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { SharedModule } from '../../shared/shared.module';
 import { InputScoreComponent } from './input-score.component';
 import { InputScoreRoutingModule } from './input-score-routing.module';
+import { GameItemComponent } from './game-item/game-item.component';
 
 @NgModule({
   imports: [
@@ -13,6 +14,7 @@ import { InputScoreRoutingModule } from './input-score-routing.module';
   ],
   declarations: [
     InputScoreComponent,
+    GameItemComponent,
   ],
 })
 export class InputScoreModule {}

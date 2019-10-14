@@ -1,0 +1,13 @@
+<div class="mario-item" matRipple [class.has-count]="count">
+  <div class="item-image-container" (click)="changeCount(1)">
+    <img [src]="src" [alt]="name">
+    <p class="item-count">{{count ? ('×' + count) : ''}}</p>
+  </div>
+  <p class="item-name" (click)="changeCount(-1)">
+    <mat-icon class="minus-icon" svgIcon="minus-square-outline"></mat-icon>
+    {{name}}
+  </p>
+
+  <div class="border-line"></div>
+  <div class="shining-line"></div>
+</div>

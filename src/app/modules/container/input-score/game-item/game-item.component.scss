@@ -1,0 +1,92 @@
+.mario-item {
+  width: 84px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  user-select: none;
+  position: relative;
+  overflow: hidden;
+
+  .item-image-container {
+    width: 100%;
+    display: flex;
+    position: relative;
+    cursor: pointer;
+
+    img {
+      width: 54px;
+      height: 54px;
+      margin: auto;
+      object-fit: contain;
+    }
+
+    .item-count {
+      bottom: -6px;
+      right: 2px;
+      margin: 0;
+      font-size: 24px;
+      letter-spacing: 2px;
+      color: white;
+      position: absolute;
+      $shadow-width: 1.5px;
+      $shadow-color: black;
+
+      text-shadow: -#{$shadow-width} -#{$shadow-width} 0 $shadow-color,
+      #{$shadow-width} -#{$shadow-width} 0 $shadow-color,
+      -#{$shadow-width} #{$shadow-width} 0 $shadow-color,
+      #{$shadow-width} #{$shadow-width} 0 $shadow-color;
+    }
+  }
+
+  .item-name {
+    margin: 4px 0 0;
+    font-size: 16px;
+    text-align: center;
+    cursor: pointer;
+
+    mat-icon {
+      width: 12px;
+      height: 12px;
+    }
+  }
+}
+
+.border-line {
+  width: calc(100% - 4px);
+  height: calc(100% - 4px);
+  border: 2px solid royalblue;
+  border-radius: 8px;
+  position: absolute;
+  clip-path: polygon(50% -50%, 50% -50%, -50% 50%, -50% 50%);
+  pointer-events: none;
+  transition: clip-path .5s;
+  background-color: rgba(#e0e0e0, .2);
+
+  .has-count & {
+    clip-path: polygon(50% -50%, 150% 50%, 50% 150%, -50% 50%);
+  }
+}
+
+.shining-line {
+  $line-width: 40px;
+  height: 200%;
+  width: $line-width;
+  position: absolute;
+  left: calc(0% - #{$line-width});
+  top: -100%;
+  transform: rotate(45deg);
+  transition-delay: .3s;
+  transition: left .6s, top .6s;
+
+  $color: #e7e7e7;
+  background: linear-gradient(90deg,
+    rgba($color, 0) 0%,
+    rgba($color, 0.7) 50%,
+    rgba($color, 0) 100%
+  );
+
+  .has-count & {
+    left: calc(100% - #{$line-width});
+    top: $line-width;
+  }
+}

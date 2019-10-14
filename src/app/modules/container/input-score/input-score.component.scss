@@ -1,0 +1,45 @@
+mat-card + mat-card {
+  margin-top: 12px;
+}
+
+:host ::ng-deep {
+  mat-radio-button label {
+    font-size: 24px;
+    padding: 6px;
+  }
+
+  mat-radio-button:not(:last-child) label {
+    padding-right: 16px;
+  }
+}
+
+.game-status {
+  ::ng-deep mat-radio-button label {
+    width: 120px;
+  }
+}
+
+.game-items {
+  display: flex;
+  flex-wrap: wrap;
+
+  app-game-item:not(:last-child) {
+    margin-right: 8px;
+  }
+}
+
+.submit-row {
+  width: 100%;
+  bottom: 8px;
+  margin-top: 8px;
+  display: flex;
+  position: sticky;
+
+  button[type=submit] {
+    padding: 8px 12px;
+    margin-left: auto;
+    font-size: 22px;
+    color: black;
+    background-color: aliceblue;
+  }
+}
