@@ -1,5 +1,6 @@
 <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
-  <mat-card>
+  <mat-card *ngLet="submitAttempt && (formErrors.playerCount || formErrors.winner) as invalidMsg"
+            [class.invalid-card]="invalidMsg">
     <mat-card-title>賽局</mat-card-title>
     <mat-card-content class="game-status">
       <mat-radio-group formControlName="playerCount">
@@ -13,34 +14,47 @@
         <mat-radio-button value="deuce">平手</mat-radio-button>
       </mat-radio-group>
     </mat-card-content>
+    <label *ngIf="invalidMsg" class="error-message">{{invalidMsg}}</label>
   </mat-card>
 
-  <mat-card>
+  <mat-card *ngLet="submitAttempt && formErrors.teamANewcomerAddition as invalidMsg" [class.invalid-card]="invalidMsg">
     <mat-card-title>A隊 - 新朋友加成</mat-card-title>
     <mat-card-content>
       <app-newcomer-addition formControlName="teamANewcomerAddition"></app-newcomer-addition>
     </mat-card-content>
+    <label *ngIf="invalidMsg" class="error-message">{{invalidMsg}}</label>
   </mat-card>
 
-  <mat-card>
-    <mat-card-title>A隊 - 道具</mat-card-title>
+  <mat-card *ngLet="submitAttempt && formErrors.teamAItems as invalidMsg" [class.invalid-card]="invalidMsg">
+    <mat-card-title>A隊 - 道具
+      <span class="items-count" [class.error-message]="!formGroup.controls['teamAItems'].valid">
+        {{teamAItemsCount}}/{{availableItemsCount || '?'}}
+      </span>
+    </mat-card-title>
     <mat-card-content>
-      <app-game-item-select formControlName="teamAItems"></app-game-item-select>
+      <app-game-item-select formControlName="teamAItems" [maxItemCount]="availableItemsCount"></app-game-item-select>
     </mat-card-content>
+    <label *ngIf="invalidMsg" class="error-message">{{invalidMsg}}</label>
   </mat-card>
 
-  <mat-card>
+  <mat-card *ngLet="submitAttempt && formErrors.teamBNewcomerAddition as invalidMsg" [class.invalid-card]="invalidMsg">
     <mat-card-title>B隊 - 新朋友加成</mat-card-title>
     <mat-card-content>
       <app-newcomer-addition formControlName="teamBNewcomerAddition"></app-newcomer-addition>
     </mat-card-content>
+    <label *ngIf="invalidMsg" class="error-message">{{invalidMsg}}</label>
   </mat-card>
 
-  <mat-card>
-    <mat-card-title>B隊 - 道具</mat-card-title>
+  <mat-card *ngLet="submitAttempt && formErrors.teamBItems as invalidMsg" [class.invalid-card]="invalidMsg">
+    <mat-card-title>B隊 - 道具
+      <span class="items-count" [class.error-message]="!formGroup.controls['teamBItems'].valid">
+        {{teamBItemsCount}}/{{availableItemsCount || '?'}}
+      </span>
+    </mat-card-title>
     <mat-card-content>
-      <app-game-item-select formControlName="teamBItems"></app-game-item-select>
+      <app-game-item-select formControlName="teamBItems" [maxItemCount]="availableItemsCount"></app-game-item-select>
     </mat-card-content>
+    <label *ngIf="invalidMsg" class="error-message">{{invalidMsg}}</label>
   </mat-card>
 
   <div class="submit-row">

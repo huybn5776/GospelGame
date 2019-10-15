@@ -14,7 +14,7 @@ export class GameItemComponent {
 
   changeCount(offset: number) {
     let newCount = this.count + offset;
-    newCount = Math.min(this.maxCount, newCount);
+    newCount = this.maxCount ? Math.min(this.maxCount, newCount) : newCount;
     newCount = Math.max(0, newCount);
     if (newCount !== this.count) {
       this.count = newCount;

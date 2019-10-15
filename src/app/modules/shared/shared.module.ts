@@ -10,6 +10,8 @@ import {
   MatTabsModule
 } from '@angular/material';
 
+import { DirectivesModule } from './directives/directives.module';
+
 @NgModule({
   exports: [
     CommonModule,
@@ -22,6 +24,7 @@ import {
     MatCardModule,
     MatRippleModule,
     MatDividerModule,
+    DirectivesModule,
   ],
 })
 export class SharedModule {}

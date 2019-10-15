@@ -25,6 +25,7 @@
     "hammerjs": "^2.0.8",
     "ngx-take-until-destroy": "^5.4.0",
     "ramda": "^0.26.1",
+    "ramda-adjunct": "^2.21.0",
     "rxjs": "~6.4.0",
     "tslib": "^1.10.0",
     "zone.js": "~0.9.1"

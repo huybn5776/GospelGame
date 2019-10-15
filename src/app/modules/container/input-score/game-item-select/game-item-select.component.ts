@@ -12,6 +12,7 @@ import { GameItemInfo } from '../../../../entities/game-item-info';
 export class GameItemSelectComponent implements ControlValueAccessor {
 
   @Input() ngModel = {};
+  @Input() maxItemCount = 0;
   @Output() ngModelChange = new EventEmitter<{}>();
 
   onChange: (value) => void;
@@ -23,7 +24,6 @@ export class GameItemSelectComponent implements ControlValueAccessor {
     {id: 'spiny-shell', name: '飛龜', src: 'assets/img/item-spiny-shell.png'},
     {id: 'star', name: '無敵星', src: 'assets/img/item-star.png'},
   ];
-  maxItemCount = 3;
 
   registerOnChange(fn: (value) => void) {
     this.onChange = fn;
