@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-input-score',
@@ -8,9 +8,25 @@ import { Component, OnInit } from '@angular/core';
 })
 export class InputScoreComponent implements OnInit {
 
-  constructor() { }
+  formGroup: FormGroup;
+
+  constructor(
+    private readonly formBuilder: FormBuilder,
+  ) {
+    this.formGroup = this.formBuilder.group({
+      playerCount: ['', Validators.required],
+      winner: ['', Validators.required],
+      teamANewcomerAddition: ['', Validators.required],
+      teamAItems: [{}, Validators.required],
+      teamBNewcomerAddition: ['', Validators.required],
+      teamBItems: [{}, Validators.required],
+    });
+  }
 
   ngOnInit() {
+  }
+
+  onSubmit() {
   }
 
 }
