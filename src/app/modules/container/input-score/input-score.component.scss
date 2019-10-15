@@ -19,15 +19,6 @@ mat-card + mat-card {
   }
 }
 
-.game-items {
-  display: flex;
-  flex-wrap: wrap;
-
-  app-game-item:not(:last-child) {
-    margin-right: 8px;
-  }
-}
-
 .submit-row {
   width: 100%;
   bottom: 8px;

@@ -1,0 +1,7 @@
+<app-game-item
+  *ngFor="let gameItem of gameItems"
+  [src]="gameItem.src"
+  [name]="gameItem.name"
+  [maxCount]="maxItemCount"
+  (countChange)="onCountChange(gameItem.id, $event)"
+></app-game-item>

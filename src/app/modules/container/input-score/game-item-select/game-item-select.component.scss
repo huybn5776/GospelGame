@@ -1,0 +1,8 @@
+:host {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+app-game-item:not(:last-child) {
+  margin-right: 8px;
+}
