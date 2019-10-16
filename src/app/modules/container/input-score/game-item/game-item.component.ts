@@ -13,7 +13,7 @@ export class GameItemComponent {
   @Output() countChange = new EventEmitter<number>();
 
   changeCount(offset: number) {
-    let newCount = this.count + offset;
+    let newCount = (this.count || 0) + offset;
     newCount = this.maxCount ? Math.min(this.maxCount, newCount) : newCount;
     newCount = Math.max(0, newCount);
     if (newCount !== this.count) {
