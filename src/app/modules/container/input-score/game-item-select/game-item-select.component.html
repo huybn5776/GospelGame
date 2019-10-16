@@ -3,5 +3,6 @@
   [src]="gameItem.src"
   [name]="gameItem.name"
   [maxCount]="maxItemCount"
-  (countChange)="onCountChange(gameItem.id, $event)"
+  [(count)]="ngModel[gameItem.id]"
+  (countChange)="onChange(this.ngModel)"
 ></app-game-item>

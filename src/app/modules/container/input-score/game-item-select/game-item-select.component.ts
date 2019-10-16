@@ -34,10 +34,4 @@ export class GameItemSelectComponent implements ControlValueAccessor {
   writeValue(obj: any) {
     this.ngModel = obj;
   }
-
-  onCountChange(id: 'mushroom' | 'golden-mushroom' | 'fake-item-box' | 'spiny-shell' | 'star', count: number) {
-    this.ngModel[id] = count;
-    this.ngModelChange.emit(this.ngModel);
-    this.onChange(this.ngModel);
-  }
 }
