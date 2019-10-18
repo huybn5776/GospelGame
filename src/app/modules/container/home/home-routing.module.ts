@@ -5,7 +5,7 @@ import { HomeComponent } from './home.component';
 
 const routes: Routes = [
   {
-    path: 'home',
+    path: '',
     component: HomeComponent,
     children: [
       {
@@ -16,12 +16,12 @@ const routes: Routes = [
         path: 'final-result',
         loadChildren: () => import('./../final-result/final-result.module').then(m => m.FinalResultModule),
       },
+      {
+        path: '**',
+        redirectTo: 'input-score',
+        pathMatch: 'full'
+      },
     ]
-  },
-  {
-    path: '',
-    redirectTo: 'home',
-    pathMatch: 'full'
   },
 ];
 
