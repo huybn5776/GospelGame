@@ -8,6 +8,8 @@ import { untilDestroyed } from 'ngx-take-until-destroy';
 import { AnyObject } from '../../../interface/model/any';
 import { ValidationService } from '../../../services/validation.service';
 import { InputValidator } from '../../../constants/validation-messages';
+import { GameScoreCalcService } from '../../services/game-score-calc.service';
+import { GameStatus } from '../../../entities/game-status';
 
 @Component({
   selector: 'app-input-score',
@@ -27,6 +29,7 @@ export class InputScoreComponent implements OnDestroy {
   constructor(
     private readonly formBuilder: FormBuilder,
     private readonly validationService: ValidationService,
+    private readonly gameScoreCalcService: GameScoreCalcService,
   ) {
     this.formGroup = this.formBuilder.group({
       playerCount: ['', Validators.required],
@@ -75,6 +78,11 @@ export class InputScoreComponent implements OnDestroy {
   onSubmit() {
     this.submitAttempt = true;
     this.updateErrors();
+    if (this.formGroup.valid) {
+      const gameStatus: GameStatus = this.formGroup.value;
+      const calcScoreResult = this.gameScoreCalcService.calcScore(gameStatus);
+      console.log(calcScoreResult);
+    }
   }
 
   ngOnDestroy() { }
