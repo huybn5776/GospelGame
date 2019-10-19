@@ -9,6 +9,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { reducers, metaReducers } from './reducers';
 import { SharedModule } from './modules/shared/shared.module';
+import { CommonComponentModule } from './modules/shared/common/common-component.module';
 
 @NgModule({
   imports: [
@@ -24,6 +25,7 @@ import { SharedModule } from './modules/shared/shared.module';
     }),
     AppRoutingModule,
     SharedModule,
+    CommonComponentModule,
   ],
   declarations: [
     AppComponent,

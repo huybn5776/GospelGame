@@ -4,12 +4,15 @@ import { filter } from 'rxjs/operators';
 
 import * as R from 'ramda';
 import { untilDestroyed } from 'ngx-take-until-destroy';
+import { MatDialog } from '@angular/material';
 
 import { AnyObject } from '../../../interface/model/any';
 import { ValidationService } from '../../../services/validation.service';
 import { InputValidator } from '../../../constants/validation-messages';
 import { GameScoreCalcService } from '../../services/game-score-calc.service';
 import { GameStatus } from '../../../entities/game-status';
+import { ConfirmDialogComponent } from '../../shared/common/confirm-dialog/confirm-dialog.component';
+import { ConfirmDialogConfig } from '../../../entities/confirm-dialog-config';
 
 @Component({
   selector: 'app-input-score',
@@ -30,6 +33,7 @@ export class InputScoreComponent implements OnDestroy {
     private readonly formBuilder: FormBuilder,
     private readonly validationService: ValidationService,
     private readonly gameScoreCalcService: GameScoreCalcService,
+    private readonly dialog: MatDialog,
   ) {
     this.formGroup = this.formBuilder.group({
       playerCount: ['', Validators.required],
@@ -81,7 +85,15 @@ export class InputScoreComponent implements OnDestroy {
     if (this.formGroup.valid) {
       const gameStatus: GameStatus = this.formGroup.value;
       const calcScoreResult = this.gameScoreCalcService.calcScore(gameStatus);
-      console.log(calcScoreResult);
+      const dialogRef = this.dialog.open<ConfirmDialogComponent, ConfirmDialogConfig, boolean>(ConfirmDialogComponent, {
+        data: {
+          title: '遊戲分數',
+          message:
+            `A隊: ${calcScoreResult.teamAScore}\n` +
+            `B隊: ${calcScoreResult.teamBScore}\n`,
+          okLabel: '送出分數'
+        },
+      });
     }
   }
 

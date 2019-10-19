@@ -5,3 +5,13 @@
 .invalid-card {
   background-color: #fce8e6;
 }
+
+mat-dialog-container.mat-dialog-container {
+  padding: 0;
+  border-radius: 4px;
+  overflow: hidden;
+
+  mat-dialog-actions.mat-dialog-actions {
+    margin-bottom: 0;
+  }
+}

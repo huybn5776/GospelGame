@@ -3,11 +3,11 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
   MatButtonModule,
-  MatCardModule, MatDividerModule,
+  MatCardModule, MatDialogModule, MatDividerModule,
   MatIconModule,
   MatRadioModule,
   MatRippleModule,
-  MatTabsModule
+  MatTabsModule,
 } from '@angular/material';
 
 import { DirectivesModule } from './directives/directives.module';
@@ -24,6 +24,7 @@ import { DirectivesModule } from './directives/directives.module';
     MatCardModule,
     MatRippleModule,
     MatDividerModule,
+    MatDialogModule,
     DirectivesModule,
   ],
 })

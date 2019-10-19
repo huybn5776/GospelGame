@@ -1,0 +1,24 @@
+<header>
+  <button type="button" mat-dialog-close>
+    <mat-icon>close</mat-icon>
+  </button>
+
+  <section id="title">
+    <ng-content select=".dialog-title"></ng-content>
+  </section>
+</header>
+
+<main>
+  <section class="dialog-body">
+    <mat-dialog-content>
+      <ng-content select=".dialog-content"></ng-content>
+    </mat-dialog-content>
+  </section>
+</main>
+
+<footer>
+  <!--suppress HtmlDeprecatedAttribute -->
+  <mat-dialog-actions align="end">
+    <ng-content select=".dialog-action"></ng-content>
+  </mat-dialog-actions>
+</footer>

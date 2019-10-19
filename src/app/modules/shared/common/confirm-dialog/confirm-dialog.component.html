@@ -1,0 +1,16 @@
+<app-dialog-layout>
+
+  <div class="dialog-title">
+    {{config.title}}
+  </div>
+
+  <div class="dialog-content">
+    <p *ngFor="let message of messages">{{message}}</p>
+  </div>
+
+  <div class="dialog-action">
+    <button *ngIf="config.cancelLabel" mat-stroked-button mat-dialog-close>{{config.cancelLabel}}</button>
+    <button *ngIf="config.okLabel" mat-stroked-button color="primary" (click)="ok()">{{config.okLabel}}</button>
+  </div>
+
+</app-dialog-layout>
