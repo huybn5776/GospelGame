@@ -10,11 +10,11 @@ export const validationMessages = {
 
 export class InputValidator {
 
-  static itemCount(requiredCount: number): ValidatorFn {
+  static itemCount(max: number, min: number = max): ValidatorFn {
     return control => {
       const count = R.sum(Object.values(control.value));
-      return count < requiredCount ? {itemMinSelection: validationMessages.itemMinSelection} :
-        count > requiredCount ? {itemMaxSelection: validationMessages.itemMaxSelection} :
+      return count < min ? {itemMinSelection: validationMessages.itemMinSelection} :
+        count > max ? {itemMaxSelection: validationMessages.itemMaxSelection} :
           null;
     };
   }
