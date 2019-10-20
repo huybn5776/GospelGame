@@ -3,6 +3,6 @@
   [src]="gameItem.src"
   [name]="gameItem.name"
   [maxCount]="maxItemCount"
-  [(count)]="ngModel[gameItem.id]"
+  [(count)]="ngModel && ngModel[gameItem.id]"
   (countChange)="onChange(this.ngModel)"
 ></app-game-item>

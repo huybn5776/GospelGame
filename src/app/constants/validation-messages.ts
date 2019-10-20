@@ -12,7 +12,7 @@ export class InputValidator {
 
   static itemCount(max: number, min: number = max): ValidatorFn {
     return control => {
-      const count = R.sum(Object.values(control.value));
+      const count = R.isNil(control.value) || R.isEmpty(control.value) ? 0 : R.sum(Object.values(control.value));
       return count < min ? {itemMinSelection: validationMessages.itemMinSelection} :
         count > max ? {itemMaxSelection: validationMessages.itemMaxSelection} :
           null;
