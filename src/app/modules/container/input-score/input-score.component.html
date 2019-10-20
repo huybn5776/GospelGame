@@ -20,7 +20,7 @@
   <mat-card *ngLet="submitAttempt && formErrors.teamAItems as invalidMsg" [class.invalid-card]="invalidMsg">
     <mat-card-title>A隊 - 道具
       <span class="items-count" [class.error-message]="!formGroup.controls['teamAItems'].valid">
-        {{teamAItemsCount}}/{{availableItemsCount || '?'}}
+        {{teamAItemsCount$ | async}}/{{availableItemsCount || '?'}}
       </span>
     </mat-card-title>
     <mat-card-content>
@@ -44,7 +44,7 @@
   <mat-card *ngLet="submitAttempt && formErrors.teamBItems as invalidMsg" [class.invalid-card]="invalidMsg">
     <mat-card-title>B隊 - 道具
       <span class="items-count" [class.error-message]="!formGroup.controls['teamBItems'].valid">
-        {{teamBItemsCount}}/{{availableItemsCount || '?'}}
+        {{teamBItemsCount$ | async}}/{{availableItemsCount || '?'}}
       </span>
     </mat-card-title>
     <mat-card-content>
