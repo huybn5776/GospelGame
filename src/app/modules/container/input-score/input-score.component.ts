@@ -1,6 +1,6 @@
 import { Component, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { filter, map } from 'rxjs/operators';
+import { filter, map, switchMap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
 import * as R from 'ramda';
@@ -45,6 +45,10 @@ export class InputScoreComponent implements OnDestroy {
     private readonly gameScoreService: GameScoreService,
     private readonly dialog: MatDialog,
   ) {
+    this.initForm();
+  }
+
+  initForm() {
     this.formGroup = this.formBuilder.group({
       playerCount: ['', Validators.required],
       winner: ['', Validators.required],
@@ -92,7 +96,7 @@ export class InputScoreComponent implements OnDestroy {
   }
 
   getValueCount(obj: AnyObject<number>) {
-    return R.sum(Object.values(obj));
+    return R.sum(Object.values(obj || {}));
   }
 
   onSubmit() {
@@ -110,6 +114,17 @@ export class InputScoreComponent implements OnDestroy {
           okLabel: '送出分數'
         },
       });
+      dialogRef.afterClosed()
+        .pipe(
+          filter(ok => ok),
+          switchMap(() => this.gameScoreService.saveScore(calcScoreResult)),
+          untilDestroyed(this),
+        )
+        .subscribe(() => {
+          this.initForm();
+          this.formErrors = {};
+          this.submitAttempt = false;
+        });
     }
   }
 
