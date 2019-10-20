@@ -33,10 +33,18 @@
     <label *ngIf="invalidMsg" class="error-message">{{invalidMsg}}</label>
   </mat-card>
 
-  <mat-card *ngLet="submitAttempt && formErrors.teamANewcomerAddition as invalidMsg" [class.invalid-card]="invalidMsg">
-    <mat-card-title>A隊 - 新朋友加成</mat-card-title>
+  <mat-card *ngLet="submitAttempt && formErrors.teamACoins as invalidMsg" [class.invalid-card]="invalidMsg">
+    <mat-card-title>A隊 - 新朋友加成
+      <span class="items-count" [class.error-message]="!formGroup.controls['teamACoins'].valid">
+        {{teamACoinCount$ | async}}/{{availableItemsCount || '?'}}
+      </span>
+    </mat-card-title>
     <mat-card-content>
-      <app-newcomer-addition formControlName="teamANewcomerAddition"></app-newcomer-addition>
+      <app-game-item-select
+        formControlName="teamACoins"
+        [maxItemCount]="availableItemsCount"
+        [items]="allCoinTypes"
+      ></app-game-item-select>
     </mat-card-content>
     <label *ngIf="invalidMsg" class="error-message">{{invalidMsg}}</label>
   </mat-card>
@@ -57,10 +65,18 @@
     <label *ngIf="invalidMsg" class="error-message">{{invalidMsg}}</label>
   </mat-card>
 
-  <mat-card *ngLet="submitAttempt && formErrors.teamBNewcomerAddition as invalidMsg" [class.invalid-card]="invalidMsg">
-    <mat-card-title>B隊 - 新朋友加成</mat-card-title>
+  <mat-card *ngLet="submitAttempt && formErrors.teamBCoins as invalidMsg" [class.invalid-card]="invalidMsg">
+    <mat-card-title>B隊 - 新朋友加成
+      <span class="items-count" [class.error-message]="!formGroup.controls['teamBCoins'].valid">
+        {{teamBCoinCount$ | async}}/{{availableItemsCount || '?'}}
+      </span>
+    </mat-card-title>
     <mat-card-content>
-      <app-newcomer-addition formControlName="teamBNewcomerAddition"></app-newcomer-addition>
+      <app-game-item-select
+        formControlName="teamBCoins"
+        [items]="allCoinTypes"
+        [maxItemCount]="formGroup.value['playerCount']"
+      ></app-game-item-select>
     </mat-card-content>
     <label *ngIf="invalidMsg" class="error-message">{{invalidMsg}}</label>
   </mat-card>

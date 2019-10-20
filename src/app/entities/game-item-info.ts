@@ -1,5 +1,5 @@
 export class GameItemInfo {
-  id: 'mushroom' | 'golden-mushroom' | 'fake-item-box' | 'spiny-shell' | 'star';
+  id: string;
   name: string;
   src: string;
 }

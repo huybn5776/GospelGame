@@ -17,9 +17,8 @@ export class GameScoreCalcService {
     teamBScore += this.getWinLossScore(gameStatus, 'b');
     teamAScore *= this.applyGameItem(gameStatus, 'a');
     teamBScore *= this.applyGameItem(gameStatus, 'b');
-
-    teamAScore += gameStatus.teamANewcomerAddition;
-    teamBScore += gameStatus.teamBNewcomerAddition;
+    teamAScore += this.addNewcomerAddition(gameStatus, 'a');
+    teamBScore += this.addNewcomerAddition(gameStatus, 'b');
 
     calcResult.teamAScore = teamAScore;
     calcResult.teamBScore = teamBScore;
@@ -66,6 +65,14 @@ export class GameScoreCalcService {
     }
 
     return Math.pow(2, multiply2) * Math.pow(3, multiply3);
+  }
+
+  private addNewcomerAddition(gameStatus: GameStatus, team: 'a' | 'b'): number {
+    const coins = {'a': gameStatus.teamACoins, 'b': gameStatus.teamBCoins}[team];
+    const coin50 = coins['coin-50'] || 0;
+    const coin100 = coins['coin-100'] || 0;
+    const coin200 = coins['coin-200'] || 0;
+    return (coin50 * 50) + (coin100 * 100) + (coin200 * 200);
   }
 
 }
