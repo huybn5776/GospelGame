@@ -17,22 +17,26 @@ export class ApiService {
   ) { }
 
   post<R, P = R>(url: string, body?: P | string, options?: HttpOptions<'json'>): Observable<R> {
-    return this.httpClient.post<R>(`${API_URL}/${url}`, body, options);
+    return this.httpClient.post<R>(this.getFullUrl(url), body, options);
   }
 
   get<T>(url: string, options?: HttpOptions<'json'>): Observable<T> {
-    return this.httpClient.get<T>(`${API_URL}/${url}`, options);
+    return this.httpClient.get<T>(this.getFullUrl(url), options);
   }
 
   put<T>(url: string, body?: T, options?: HttpOptions<'json'>): Observable<T> {
-    return this.httpClient.put<T>(`${API_URL}/${url}`, body, options);
+    return this.httpClient.put<T>(this.getFullUrl(url), body, options);
   }
 
   patch<R, P = R>(url: string, body?: P | string, options?: HttpOptions<'json'>): Observable<R> {
-    return this.httpClient.patch<R>(`${API_URL}/${url}`, body, options);
+    return this.httpClient.patch<R>(this.getFullUrl(url), body, options);
   }
 
   delete<T>(url: string, options?: HttpOptions<'json'>): Observable<T> {
-    return this.httpClient.delete<T>(`${API_URL}/${url}`, options);
+    return this.httpClient.delete<T>(this.getFullUrl(url), options);
+  }
+
+  private getFullUrl(url: string): string {
+    return url.startsWith('http') ? url : `${API_URL}/${url}`;
   }
 }
