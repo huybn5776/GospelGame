@@ -4,7 +4,7 @@
     <p class="item-count">{{count ? ('×' + count) : ''}}</p>
   </div>
   <p class="item-name" (click)="changeCount(-1)">
-    <mat-icon class="minus-icon" svgIcon="minus-square-outline"></mat-icon>
+    <mat-icon class="minus-icon" svgIcon="minus-square-outline" [class.disabled]="!count"></mat-icon>
     {{name}}
   </p>
 

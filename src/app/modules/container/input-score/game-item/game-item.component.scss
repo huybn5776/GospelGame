@@ -47,6 +47,10 @@
     mat-icon {
       width: 12px;
       height: 12px;
+
+      &.disabled {
+        opacity: .2;
+      }
     }
   }
 }
