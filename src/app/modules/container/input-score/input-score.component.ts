@@ -26,8 +26,7 @@ export class InputScoreComponent implements OnDestroy {
   formErrors: AnyObject<string> = {};
   availableItemsCount: number;
 
-  teamAItemsCount = 0;
-  teamBItemsCount = 0;
+  allGameItems: GameItemInfo[] = allGameItems;
 
   constructor(
     private readonly formBuilder: FormBuilder,

@@ -24,7 +24,11 @@
       </span>
     </mat-card-title>
     <mat-card-content>
-      <app-game-item-select formControlName="teamAItems" [maxItemCount]="availableItemsCount"></app-game-item-select>
+      <app-game-item-select
+        formControlName="teamAItems"
+        [maxItemCount]="availableItemsCount"
+        [items]="allGameItems"
+      ></app-game-item-select>
     </mat-card-content>
     <label *ngIf="invalidMsg" class="error-message">{{invalidMsg}}</label>
   </mat-card>
@@ -44,7 +48,11 @@
       </span>
     </mat-card-title>
     <mat-card-content>
-      <app-game-item-select formControlName="teamBItems" [maxItemCount]="availableItemsCount"></app-game-item-select>
+      <app-game-item-select
+        formControlName="teamBItems"
+        [maxItemCount]="availableItemsCount"
+        [items]="allGameItems"
+      ></app-game-item-select>
     </mat-card-content>
     <label *ngIf="invalidMsg" class="error-message">{{invalidMsg}}</label>
   </mat-card>

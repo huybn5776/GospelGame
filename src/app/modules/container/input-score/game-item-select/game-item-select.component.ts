@@ -2,7 +2,6 @@ import { Component, EventEmitter, forwardRef, Input, Output } from '@angular/cor
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { GameItemInfo } from '../../../../entities/game-item-info';
-import { allGameItems } from '../../../../constants/all-game-items';
 
 @Component({
   selector: 'app-game-item-select',
@@ -12,13 +11,12 @@ import { allGameItems } from '../../../../constants/all-game-items';
 })
 export class GameItemSelectComponent implements ControlValueAccessor {
 
+  @Input() items: GameItemInfo[] = [];
   @Input() ngModel = {};
   @Input() maxItemCount = 0;
   @Output() ngModelChange = new EventEmitter<{}>();
 
   onChange: (value) => void;
-
-  gameItems: GameItemInfo[] = allGameItems;
 
   registerOnChange(fn: (value) => void) {
     this.onChange = fn;
