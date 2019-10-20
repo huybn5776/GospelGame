@@ -15,11 +15,11 @@ export class GameScoreCalcService {
 
     teamAScore += this.getWinLossScore(gameStatus, 'a');
     teamBScore += this.getWinLossScore(gameStatus, 'b');
-    teamAScore += gameStatus.teamANewcomerAddition;
-    teamBScore += gameStatus.teamBNewcomerAddition;
-
     teamAScore *= this.applyGameItem(gameStatus, 'a');
     teamBScore *= this.applyGameItem(gameStatus, 'b');
+
+    teamAScore += gameStatus.teamANewcomerAddition;
+    teamBScore += gameStatus.teamBNewcomerAddition;
 
     calcResult.teamAScore = teamAScore;
     calcResult.teamBScore = teamBScore;
@@ -52,7 +52,6 @@ export class GameScoreCalcService {
 
     let multiply2 = selfItems['mushroom'] || 0;
     let multiply3 = selfItems['golden-mushroom'] || 0;
-    let divide2 = 0;
     const invalidateItem = Math.max(0,
       (selfItems['fake-item-box'] || 0) +
       (opponentItem['spiny-shell'] || 0) +
@@ -63,12 +62,10 @@ export class GameScoreCalcService {
         multiply3--;
       } else if (multiply2) {
         multiply2--;
-      } else {
-        divide2++;
       }
     }
 
-    return Math.pow(2, multiply2) * Math.pow(3, multiply3) / Math.pow(2, divide2);
+    return Math.pow(2, multiply2) * Math.pow(3, multiply3);
   }
 
 }

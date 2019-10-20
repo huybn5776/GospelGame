@@ -62,8 +62,7 @@ export class InputScoreComponent implements OnDestroy {
   }
 
   updateItemCountValidator(playerCount: number) {
-    this.availableItemsCount = playerCount === 2 ? 3 :
-      playerCount === 4 ? 5 : null;
+    this.availableItemsCount = playerCount;
     if (this.availableItemsCount) {
       this.formGroup.controls['teamAItems']
         .setValidators(InputValidator.itemCount(this.availableItemsCount));
