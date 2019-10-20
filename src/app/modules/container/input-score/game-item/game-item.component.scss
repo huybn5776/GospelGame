@@ -1,5 +1,5 @@
 .mario-item {
-  width: 84px;
+  width: 92px;
   border-radius: 8px;
   display: flex;
   flex-direction: column;
@@ -40,6 +40,7 @@
 
   .item-name {
     margin: 0;
+    padding: 4px 0;
     font-size: 16px;
     text-align: center;
     cursor: pointer;
