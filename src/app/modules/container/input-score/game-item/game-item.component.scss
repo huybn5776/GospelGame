@@ -81,7 +81,7 @@
   top: -100%;
   transform: rotate(45deg);
   transition-delay: .3s;
-  transition: left .6s, top .6s;
+  transition: transform .6s;
   pointer-events: none;
 
   $color: #e7e7e7;
@@ -92,7 +92,7 @@
   );
 
   .has-count & {
-    left: calc(100% - #{$line-width});
-    top: $line-width;
+    // 130px = sqrt(pow(92px, 2) * 2)
+    transform: rotate(45deg) translateX(calc(130px + #{$line-width}));
   }
 }
