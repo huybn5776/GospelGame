@@ -64,7 +64,11 @@ export class GameScoreCalcService {
       }
     }
 
-    return Math.pow(2, multiply2) * Math.pow(3, multiply3);
+    let multiplyNumber = 1;
+    multiplyNumber += multiply2 * 2;
+    multiplyNumber += multiply3 * 3;
+
+    return multiplyNumber;
   }
 
   private addNewcomerAddition(gameStatus: GameStatus, team: 'a' | 'b'): number {
