@@ -32,6 +32,7 @@ mat-card + mat-card {
   margin-top: 8px;
   display: flex;
   position: sticky;
+  pointer-events: none;
 
   button[type=submit] {
     padding: 8px 12px;
@@ -39,5 +40,6 @@ mat-card + mat-card {
     font-size: 22px;
     color: black;
     background-color: aliceblue;
+    pointer-events: auto;
   }
 }
