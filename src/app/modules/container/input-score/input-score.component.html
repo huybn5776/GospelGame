@@ -17,15 +17,15 @@
     <label *ngIf="invalidMsg" class="error-message">{{invalidMsg}}</label>
   </mat-card>
 
-  <mat-card *ngLet="submitAttempt && formErrors.teamAItems as invalidMsg" [class.invalid-card]="invalidMsg">
+  <mat-card *ngLet="submitAttempt && formErrors.itemsA as invalidMsg" [class.invalid-card]="invalidMsg">
     <mat-card-title>A隊 - 道具
-      <span class="items-count" [class.error-message]="!formGroup.controls['teamAItems'].valid">
+      <span class="items-count" [class.error-message]="!formGroup.controls['itemsA'].valid">
         {{teamAItemsCount$ | async}}/{{availableItemsCount || '?'}}
       </span>
     </mat-card-title>
     <mat-card-content>
       <app-game-item-select
-        formControlName="teamAItems"
+        formControlName="itemsA"
         [maxItemCount]="availableItemsCount"
         [items]="allGameItems"
       ></app-game-item-select>
@@ -33,15 +33,15 @@
     <label *ngIf="invalidMsg" class="error-message">{{invalidMsg}}</label>
   </mat-card>
 
-  <mat-card *ngLet="submitAttempt && formErrors.teamACoins as invalidMsg" [class.invalid-card]="invalidMsg">
+  <mat-card *ngLet="submitAttempt && formErrors.coinsA as invalidMsg" [class.invalid-card]="invalidMsg">
     <mat-card-title>A隊 - 新朋友加成
-      <span class="items-count" [class.error-message]="!formGroup.controls['teamACoins'].valid">
+      <span class="items-count" [class.error-message]="!formGroup.controls['coinsA'].valid">
         {{teamACoinCount$ | async}}/{{availableItemsCount || '?'}}
       </span>
     </mat-card-title>
     <mat-card-content>
       <app-game-item-select
-        formControlName="teamACoins"
+        formControlName="coinsA"
         [maxItemCount]="availableItemsCount"
         [items]="allCoinTypes"
       ></app-game-item-select>
@@ -49,15 +49,15 @@
     <label *ngIf="invalidMsg" class="error-message">{{invalidMsg}}</label>
   </mat-card>
 
-  <mat-card *ngLet="submitAttempt && formErrors.teamBItems as invalidMsg" [class.invalid-card]="invalidMsg">
+  <mat-card *ngLet="submitAttempt && formErrors.itemsB as invalidMsg" [class.invalid-card]="invalidMsg">
     <mat-card-title>B隊 - 道具
-      <span class="items-count" [class.error-message]="!formGroup.controls['teamBItems'].valid">
+      <span class="items-count" [class.error-message]="!formGroup.controls['itemsB'].valid">
         {{teamBItemsCount$ | async}}/{{availableItemsCount || '?'}}
       </span>
     </mat-card-title>
     <mat-card-content>
       <app-game-item-select
-        formControlName="teamBItems"
+        formControlName="itemsB"
         [maxItemCount]="availableItemsCount"
         [items]="allGameItems"
       ></app-game-item-select>
@@ -65,15 +65,15 @@
     <label *ngIf="invalidMsg" class="error-message">{{invalidMsg}}</label>
   </mat-card>
 
-  <mat-card *ngLet="submitAttempt && formErrors.teamBCoins as invalidMsg" [class.invalid-card]="invalidMsg">
+  <mat-card *ngLet="submitAttempt && formErrors.coinsB as invalidMsg" [class.invalid-card]="invalidMsg">
     <mat-card-title>B隊 - 新朋友加成
-      <span class="items-count" [class.error-message]="!formGroup.controls['teamBCoins'].valid">
+      <span class="items-count" [class.error-message]="!formGroup.controls['coinsB'].valid">
         {{teamBCoinCount$ | async}}/{{availableItemsCount || '?'}}
       </span>
     </mat-card-title>
     <mat-card-content>
       <app-game-item-select
-        formControlName="teamBCoins"
+        formControlName="coinsB"
         [items]="allCoinTypes"
         [maxItemCount]="formGroup.value['playerCount']"
       ></app-game-item-select>

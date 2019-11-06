@@ -3,8 +3,8 @@ export class GameScorePost {
   result: string;
   newFriendA: string;
   newFriendB: string;
-  propA: string;
-  propB: string;
-  fractionA: number;
-  fractionB: number;
+  itemsA: string;
+  itemsB: string;
+  scoreA: number;
+  scoreB: number;
 }

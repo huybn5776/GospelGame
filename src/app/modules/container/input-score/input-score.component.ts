@@ -52,10 +52,10 @@ export class InputScoreComponent implements OnDestroy {
     this.formGroup = this.formBuilder.group({
       playerCount: ['', Validators.required],
       winner: ['', Validators.required],
-      teamAItems: {},
-      teamACoins: {},
-      teamBItems: {},
-      teamBCoins: {},
+      itemsA: {},
+      coinsA: {},
+      itemsB: {},
+      coinsB: {},
     });
     this.formGroup.statusChanges
       .pipe(filter(() => this.submitAttempt), untilDestroyed(this))
@@ -64,13 +64,13 @@ export class InputScoreComponent implements OnDestroy {
       .pipe(untilDestroyed(this))
       .subscribe(playerCount => this.updateItemCountValidator(playerCount));
 
-    this.teamAItemsCount$ = this.formGroup.controls['teamAItems'].valueChanges
+    this.teamAItemsCount$ = this.formGroup.controls['itemsA'].valueChanges
       .pipe(map(items => this.getValueCount(items)));
-    this.teamBItemsCount$ = this.formGroup.controls['teamBItems'].valueChanges
+    this.teamBItemsCount$ = this.formGroup.controls['itemsB'].valueChanges
       .pipe(map(items => this.getValueCount(items)));
-    this.teamACoinCount$ = this.formGroup.controls['teamACoins'].valueChanges
+    this.teamACoinCount$ = this.formGroup.controls['coinsA'].valueChanges
       .pipe(map(items => this.getValueCount(items)));
-    this.teamBCoinCount$ = this.formGroup.controls['teamBCoins'].valueChanges
+    this.teamBCoinCount$ = this.formGroup.controls['coinsB'].valueChanges
       .pipe(map(items => this.getValueCount(items)));
   }
 
@@ -81,15 +81,15 @@ export class InputScoreComponent implements OnDestroy {
   updateItemCountValidator(playerCount: number) {
     this.availableItemsCount = playerCount;
     if (this.availableItemsCount) {
-      this.formGroup.controls['teamAItems']
+      this.formGroup.controls['itemsA']
         .setValidators(InputValidator.itemCount(this.availableItemsCount));
-      this.formGroup.controls['teamBItems']
+      this.formGroup.controls['itemsB']
         .setValidators(InputValidator.itemCount(this.availableItemsCount));
-      this.formGroup.controls['teamACoins']
+      this.formGroup.controls['coinsA']
         .setValidators(InputValidator.itemCount(this.availableItemsCount, 0));
-      this.formGroup.controls['teamBCoins']
+      this.formGroup.controls['coinsB']
         .setValidators(InputValidator.itemCount(this.availableItemsCount, 0));
-      ['teamAItems', 'teamBItems', 'teamACoins', 'teamBCoins']
+      ['itemsA', 'itemsB', 'coinsA', 'coinsB']
         .forEach(name => this.formGroup.controls[name].updateValueAndValidity());
       this.updateErrors();
     }
@@ -109,8 +109,8 @@ export class InputScoreComponent implements OnDestroy {
         data: {
           title: '遊戲分數',
           message:
-            `A隊: ${calcScoreResult.teamAScore}\n` +
-            `B隊: ${calcScoreResult.teamBScore}\n`,
+            `A隊: ${calcScoreResult.scoreA}\n` +
+            `B隊: ${calcScoreResult.scoreB}\n`,
           okLabel: '送出分數'
         },
       });

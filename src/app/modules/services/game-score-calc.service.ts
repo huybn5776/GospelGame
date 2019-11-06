@@ -20,8 +20,8 @@ export class GameScoreCalcService {
     teamAScore += this.addNewcomerAddition(gameStatus, 'a');
     teamBScore += this.addNewcomerAddition(gameStatus, 'b');
 
-    calcResult.teamAScore = teamAScore;
-    calcResult.teamBScore = teamBScore;
+    calcResult.scoreA = teamAScore;
+    calcResult.scoreB = teamBScore;
     calcResult.gameStatus = gameStatus;
     return calcResult;
   }
@@ -46,8 +46,8 @@ export class GameScoreCalcService {
   }
 
   private applyGameItem(gameStatus: GameStatus, team: 'a' | 'b'): number {
-    const selfItems = team === 'a' ? gameStatus.teamAItems : gameStatus.teamBItems;
-    const opponentItem = team === 'a' ? gameStatus.teamBItems : gameStatus.teamAItems;
+    const selfItems = team === 'a' ? gameStatus.itemsA : gameStatus.itemsB;
+    const opponentItem = team === 'a' ? gameStatus.itemsB : gameStatus.itemsA;
 
     let multiply2 = selfItems['mushroom'] || 0;
     let multiply3 = selfItems['golden-mushroom'] || 0;
@@ -72,7 +72,7 @@ export class GameScoreCalcService {
   }
 
   private addNewcomerAddition(gameStatus: GameStatus, team: 'a' | 'b'): number {
-    const coins = {'a': gameStatus.teamACoins, 'b': gameStatus.teamBCoins}[team];
+    const coins = {'a': gameStatus.coinsA, 'b': gameStatus.coinsB}[team];
     const coin50 = coins['coin-50'] || 0;
     const coin100 = coins['coin-100'] || 0;
     const coin200 = coins['coin-200'] || 0;

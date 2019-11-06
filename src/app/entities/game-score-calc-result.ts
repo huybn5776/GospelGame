@@ -1,9 +1,9 @@
 import { GameStatus } from './game-status';
 
 export class GameScoreCalcResult {
-  teamAScore: number;
-  teamBScore: number;
+  id: number;
+  scoreA: number;
+  scoreB: number;
   gameStatus: GameStatus;
   details: [];
-  timestamp = new Date();
 }
