@@ -121,11 +121,16 @@ export class InputScoreComponent implements OnDestroy {
           untilDestroyed(this),
         )
         .subscribe(() => {
-          this.initForm();
-          this.formErrors = {};
-          this.submitAttempt = false;
+          this.store.dispatch(ScoreboardActions.addScore({calcResult: calcScoreResult}));
+          this.reset();
         });
     }
+  }
+
+  reset() {
+    this.initForm();
+    this.formErrors = {};
+    this.submitAttempt = false;
   }
 
   ngOnDestroy() { }

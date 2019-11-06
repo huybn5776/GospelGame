@@ -33,13 +33,24 @@ mat-card + mat-card {
   display: flex;
   position: sticky;
   pointer-events: none;
+  justify-content: flex-end;
 
-  button[type=submit] {
+  > * {
+    pointer-events: auto;
+  }
+
+  button {
     padding: 8px 12px;
-    margin-left: auto;
     font-size: 22px;
     color: black;
+
+    &:first-child {
+      margin-right: 12px;
+    }
+  }
+
+
+  button[type=submit] {
     background-color: aliceblue;
-    pointer-events: auto;
   }
 }

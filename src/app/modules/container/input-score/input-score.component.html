@@ -82,6 +82,11 @@
   </mat-card>
 
   <div class="submit-row">
+    <button [style.display]="formGroup.pristine? 'none':''"
+            class="reset-form" mat-stroked-button type="button"
+            (click)="reset()">
+      <mat-icon>refresh</mat-icon>
+    </button>
     <button type="submit" mat-raised-button>計算分數</button>
   </div>
 </form>
