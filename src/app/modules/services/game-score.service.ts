@@ -26,7 +26,7 @@ export class GameScoreService {
     this.gameItemLookup = R.indexBy(R.prop('id'), [...allGameItems, ...allCoinTypes]);
   }
 
-  saveScore(gameScore: GameScoreCalcResult): Observable<void> {
+  saveScore(gameScore: GameScore): Observable<number> {
     return merge(this.saveToLocal(gameScore), this.postScore(gameScore));
   }
 
@@ -34,19 +34,7 @@ export class GameScoreService {
     this.localStorageService.remove(GAME_SCORE_RESULTS);
   }
 
-  private saveToLocal(gameScore: GameScoreCalcResult): Observable<void> {
-    this.localStorageService.update<GameScoreCalcResult[]>(
-      GAME_SCORE_RESULTS,
-      gameScoreResults => {
-        const scores = (gameScoreResults || []);
-        scores.push(gameScore);
-        return scores;
-      }
-    );
-    return of(null);
-  }
-
-  private postScore(gameScore: GameScoreCalcResult): Observable<void> {
+  private postScore(gameScore: GameScore): Observable<number> {
     const postModel = new GameScorePost();
     const gameStatus = gameScore.gameStatus;
 

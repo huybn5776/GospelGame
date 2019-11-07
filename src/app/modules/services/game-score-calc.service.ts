@@ -1,15 +1,15 @@
 import { Injectable } from '@angular/core';
 
-import { GameScoreCalcResult } from '../../entities/game-score-calc-result';
 import { GameStatus } from '../../entities/game-status';
+import { GameScore } from '../../entities/game-score';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GameScoreCalcService {
 
-  public calcScore(gameStatus: GameStatus): GameScoreCalcResult {
-    const calcResult = new GameScoreCalcResult();
+  public calcScore(gameStatus: GameStatus): GameScore {
+    const gameScore = new GameScore();
     let teamAScore = 0;
     let teamBScore = 0;
 
@@ -20,10 +20,15 @@ export class GameScoreCalcService {
     teamAScore += this.addNewcomerAddition(gameStatus, 'a');
     teamBScore += this.addNewcomerAddition(gameStatus, 'b');
 
-    calcResult.scoreA = teamAScore;
-    calcResult.scoreB = teamBScore;
-    calcResult.gameStatus = gameStatus;
-    return calcResult;
+    gameScore.scoreA = teamAScore;
+    gameScore.scoreB = teamBScore;
+    gameScore.playerCount = gameStatus.playerCount;
+    gameScore.winner = gameStatus.winner;
+    gameScore.itemsA = gameStatus.itemsA;
+    gameScore.coinsA = gameStatus.coinsA;
+    gameScore.itemsB = gameStatus.itemsB;
+    gameScore.coinsB = gameStatus.coinsB;
+    return gameScore;
   }
 
   private getWinLossScore(gameStatus: GameStatus, team: 'a' | 'b'): number {
