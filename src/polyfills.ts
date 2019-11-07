@@ -61,3 +61,15 @@ import 'zone.js/dist/zone';  // Included with Angular CLI.
 /***************************************************************************************************
  * APPLICATION IMPORTS
  */
+
+const _global = window as any;
+
+declare global {
+  function n<T>(someObject: T, defaultValue?: T): T;
+}
+
+// The ?. operator (Null-conditional operator) for Typescript. From https://stackoverflow.com/a/41687858
+// tslint:disable-next-line: only-arrow-functions
+_global.n = function <T>(someObject: T, defaultValue: T = {} as T): T {
+  return typeof someObject === 'undefined' || someObject === null ? defaultValue : someObject;
+};
