@@ -1,0 +1,59 @@
+<div class="scores-table-container">
+  <table mat-table [dataSource]="gameScores$ | async">
+
+    <ng-container matColumnDef="inning">
+      <th mat-header-cell *matHeaderCellDef>局數</th>
+      <td mat-cell *matCellDef="let score">{{asScore(score).inning}}</td>
+    </ng-container>
+    <ng-container matColumnDef="time">
+      <th mat-header-cell *matHeaderCellDef>時間</th>
+      <td mat-cell *matCellDef="let score">{{asScore(score).time | date:'M/d hh:mm:ss'}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="playerCount">
+      <th mat-header-cell *matHeaderCellDef>賽局</th>
+      <td mat-cell *matCellDef="let score">{{asScore(score).playerCount}}人賽</td>
+    </ng-container>
+    <ng-container matColumnDef="winner">
+      <th mat-header-cell *matHeaderCellDef>贏家</th>
+      <td mat-cell *matCellDef="let score">
+        <ng-container *ngLet="asScore(score).winner as winner">
+          {{winner === 'a' ? 'A隊' : winner === 'b' ? 'B隊' : '---'}}
+        </ng-container>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="itemsA">
+      <th mat-header-cell *matHeaderCellDef class="items-column">A隊道具</th>
+      <td mat-cell *matCellDef="let score">
+        <app-items-view [itemCount]="asScore(score).itemsA"></app-items-view>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="itemsB">
+      <th mat-header-cell *matHeaderCellDef class="items-column">B隊道具</th>
+      <td mat-cell *matCellDef="let score">
+        <app-items-view [itemCount]="asScore(score).itemsB"></app-items-view>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="coins">
+      <th mat-header-cell *matHeaderCellDef>新朋友加成</th>
+      <td mat-cell *matCellDef="let score">
+        <app-coins-view [coinCount]="asScore(score).coinsA"></app-coins-view>
+        /
+        <app-coins-view [coinCount]="asScore(score).coinsB"></app-coins-view>
+    </ng-container>
+
+    <ng-container matColumnDef="scores">
+      <th mat-header-cell *matHeaderCellDef>分數</th>
+      <td mat-cell *matCellDef="let score">{{asScore(score).scoreA}} / {{asScore(score).scoreB}}</td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+    <!--suppress JSUnusedGlobalSymbols -->
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+</div>
+
+<footer>
+  <mat-progress-bar *ngIf="gameScoresLoading$ | async" mode="buffer"></mat-progress-bar>
+</footer>

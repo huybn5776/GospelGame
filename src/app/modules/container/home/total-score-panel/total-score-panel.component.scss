@@ -1,0 +1,10 @@
+.total-score {
+  display: flex;
+  justify-content: flex-end;
+
+  span {
+    margin: 6px 18px 0 8px;
+    font-size: 14px;
+    color: gray;
+  }
+}

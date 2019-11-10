@@ -4,9 +4,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
   MatButtonModule,
   MatCardModule, MatDialogModule, MatDividerModule,
-  MatIconModule,
+  MatIconModule, MatProgressBarModule,
   MatRadioModule,
-  MatRippleModule,
+  MatRippleModule, MatTableModule,
   MatTabsModule,
 } from '@angular/material';
 
@@ -25,6 +25,8 @@ import { DirectivesModule } from './directives/directives.module';
     MatRippleModule,
     MatDividerModule,
     MatDialogModule,
+    MatTableModule,
+    MatProgressBarModule,
     DirectivesModule,
   ],
 })

@@ -1,11 +1,12 @@
 import { Component, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { filter, map, switchMap } from 'rxjs/operators';
+import { filter, map, withLatestFrom } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
-import * as R from 'ramda';
-import { untilDestroyed } from 'ngx-take-until-destroy';
 import { MatDialog } from '@angular/material';
+import { Store } from '@ngrx/store';
+import { untilDestroyed } from 'ngx-take-until-destroy';
+import * as R from 'ramda';
 
 import { AnyObject } from '../../../interface/model/any';
 import { ValidationService } from '../../../services/validation.service';
@@ -14,9 +15,11 @@ import { GameScoreCalcService } from '../../services/game-score-calc.service';
 import { GameStatus } from '../../../entities/game-status';
 import { ConfirmDialogComponent } from '../../shared/common/confirm-dialog/confirm-dialog.component';
 import { ConfirmDialogConfig } from '../../../entities/confirm-dialog-config';
-import { GameScoreService } from '../../services/game-score.service';
 import { GameItemInfo } from '../../../entities/game-item-info';
 import { allGameItems, allCoinTypes } from '../../../constants/all-game-items';
+import { RootState } from '../../../store/reducers';
+import { GameScoreActions } from '../../../store/actions';
+import { fromGameScore } from '../../../store/selectors';
 
 @Component({
   selector: 'app-input-score',
@@ -38,14 +41,17 @@ export class InputScoreComponent implements OnDestroy {
   teamACoinCount$: Observable<number>;
   teamBCoinCount$: Observable<number>;
 
+  nextGameInningNumber$: Observable<number>;
+
   constructor(
     private readonly formBuilder: FormBuilder,
     private readonly validationService: ValidationService,
     private readonly gameScoreCalcService: GameScoreCalcService,
-    private readonly gameScoreService: GameScoreService,
     private readonly dialog: MatDialog,
+    private readonly store: Store<RootState>,
   ) {
     this.initForm();
+    this.nextGameInningNumber$ = store.select(fromGameScore.selectNextInning);
   }
 
   initForm() {
@@ -104,24 +110,28 @@ export class InputScoreComponent implements OnDestroy {
     this.updateErrors();
     if (this.formGroup.valid) {
       const gameStatus: GameStatus = this.formGroup.value;
-      const calcScoreResult = this.gameScoreCalcService.calcScore(gameStatus);
+      const gameScore = this.gameScoreCalcService.calcScore(gameStatus);
       const dialogRef = this.dialog.open<ConfirmDialogComponent, ConfirmDialogConfig, boolean>(ConfirmDialogComponent, {
         data: {
           title: '遊戲分數',
           message:
-            `A隊: ${calcScoreResult.scoreA}\n` +
-            `B隊: ${calcScoreResult.scoreB}\n`,
+            `A隊: ${gameScore.scoreA}\n` +
+            `B隊: ${gameScore.scoreB}\n`,
           okLabel: '送出分數'
         },
       });
       dialogRef.afterClosed()
         .pipe(
           filter(ok => ok),
-          switchMap(() => this.gameScoreService.saveScore(calcScoreResult)),
+          withLatestFrom(this.nextGameInningNumber$),
           untilDestroyed(this),
         )
-        .subscribe(() => {
-          this.store.dispatch(ScoreboardActions.addScore({calcResult: calcScoreResult}));
+        .subscribe(([_, inning]) => {
+          gameScore.time = new Date();
+          // "id" and "inning" value will generate by backend api, set those here is just for save to store before posting data.
+          gameScore.id = new Date().getTime();
+          gameScore.inning = inning;
+          this.store.dispatch(GameScoreActions.addScore({gameScore: gameScore}));
           this.reset();
         });
     }

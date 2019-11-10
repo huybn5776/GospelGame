@@ -1,0 +1,22 @@
+.items-container {
+
+  .small-item {
+
+    img {
+      width: 28px;
+      height: 28px;
+      object-fit: contain;
+    }
+
+    &:not(:last-child):after {
+      content: '';
+      width: 1px;
+      height: 16px;
+      margin: 6px 2px 0;
+      vertical-align: top;
+      background-color: lightgray;
+      display: inline-block;
+    }
+  }
+
+}

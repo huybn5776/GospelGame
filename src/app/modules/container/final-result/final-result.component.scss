@@ -1,0 +1,29 @@
+:host {
+  position: relative;
+  display: block;
+}
+
+.scores-table-container {
+  max-height: calc(100vh - 116px);
+  overflow: auto;
+
+  table {
+    width: 100%;
+  }
+}
+
+.items-column {
+  width: 144px;
+}
+
+app-coins-view {
+  display: inline-block;
+}
+
+footer {
+  width: 100%;
+  bottom: 0;
+  z-index: 100;
+  position: absolute;
+  background-color: white;
+}

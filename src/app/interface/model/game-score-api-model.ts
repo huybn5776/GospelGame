@@ -1,4 +1,6 @@
-export class GameScorePost {
+export interface GameScoreApiModel {
+  id: number;
+  inning: number;
   theory: string;
   result: string;
   newFriendA: string;

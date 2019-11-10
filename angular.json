@@ -42,7 +42,7 @@
                   "with": "src/environments/environment.prod.ts"
                 }
               ],
-              "baseHref" : "/GospelGame/",
+              "baseHref": "/GospelGame/",
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
@@ -130,5 +130,8 @@
       }
     }
   },
-  "defaultProject": "GospelGame"
+  "defaultProject": "GospelGame",
+  "cli": {
+    "defaultCollection": "@ngrx/schematics"
+  }
 }

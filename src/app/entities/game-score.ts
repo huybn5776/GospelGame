@@ -2,6 +2,7 @@ import { AnyObject } from '../interface/model/any';
 
 export class GameScore {
   id: number;
+  inning: number;
   scoreA: number;
   scoreB: number;
   playerCount?: 2 | 4;
@@ -10,4 +11,5 @@ export class GameScore {
   coinsA: AnyObject<number>;
   itemsB: AnyObject<number>;
   coinsB: AnyObject<number>;
+  time: Date;
 }

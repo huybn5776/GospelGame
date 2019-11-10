@@ -1,16 +1,17 @@
 import { Injectable } from '@angular/core';
-import { merge, Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import * as R from 'ramda';
 
 import { ApiService } from '../../services/api.service';
-import { GameScoreCalcResult } from '../../entities/game-score-calc-result';
-import { GameScorePost } from '../../interface/post-model/game-score-post';
+import { SERVER_URLS } from '../../constants/constants';
 import { AnyObject } from '../../interface/model/any';
-import { GameItemInfo } from '../../entities/game-item-info';
 import { allCoinTypes, allGameItems } from '../../constants/all-game-items';
-import { LocalStorageService } from '../../services/local-storage.service';
-import { GAME_SCORE_RESULTS } from '../../constants/constants';
+import { GameScorePost } from '../../interface/post-model/game-score-post';
+import { GameItemInfo } from '../../entities/game-item-info';
+import { GameScoreApiModel } from '../../interface/model/game-score-api-model';
+import { GameScore } from '../../entities/game-score';
 
 @Injectable({
   providedIn: 'root'
@@ -18,36 +19,75 @@ import { GAME_SCORE_RESULTS } from '../../constants/constants';
 export class GameScoreService {
 
   readonly gameItemLookup: AnyObject<GameItemInfo>;
+  readonly apiUrl = SERVER_URLS.scoreApi;
 
   constructor(
     private readonly apiService: ApiService,
-    private readonly localStorageService: LocalStorageService,
   ) {
     this.gameItemLookup = R.indexBy(R.prop('id'), [...allGameItems, ...allCoinTypes]);
   }
 
-  saveScore(gameScore: GameScore): Observable<number> {
-    return merge(this.saveToLocal(gameScore), this.postScore(gameScore));
+  getScores(): Observable<GameScore[]> {
+    return this.apiService.get<GameScoreApiModel[]>(this.apiUrl)
+      .pipe(map(scores => scores.map(source => this.convertScore(source))));
   }
 
-  clearScores() {
-    this.localStorageService.remove(GAME_SCORE_RESULTS);
-  }
-
-  private postScore(gameScore: GameScore): Observable<number> {
+  postScore(gameScore: GameScore): Observable<GameScore> {
     const postModel = new GameScorePost();
-    const gameStatus = gameScore.gameStatus;
 
-    postModel.theory = {'2': '2人賽', '4': '4人賽'}[gameStatus.playerCount];
-    postModel.result = {'a': 'A隊贏', 'b': 'B隊贏', 'deuce': '平手'}[gameStatus.winner];
-    postModel.propA = this.convertItems(gameStatus.teamAItems);
-    postModel.propB = this.convertItems(gameStatus.teamBItems);
-    postModel.newFriendA = this.convertItems(gameStatus.teamACoins);
-    postModel.newFriendB = this.convertItems(gameStatus.teamBCoins);
-    postModel.fractionA = gameScore.teamAScore;
-    postModel.fractionB = gameScore.teamBScore;
+    postModel.theory = {'2': '2人賽', '4': '4人賽'}[gameScore.playerCount];
+    postModel.result = {'a': 'A隊贏', 'b': 'B隊贏', 'deuce': '平手'}[gameScore.winner];
+    postModel.itemsA = this.convertItems(gameScore.itemsA);
+    postModel.itemsB = this.convertItems(gameScore.itemsB);
+    postModel.newFriendA = this.convertItems(gameScore.coinsA);
+    postModel.newFriendB = this.convertItems(gameScore.coinsB);
+    postModel.scoreA = gameScore.scoreA;
+    postModel.scoreB = gameScore.scoreB;
+    postModel.time = gameScore.time;
 
-    return this.apiService.post('http://changelifesys.org/Tool/1116.aspx', postModel);
+    return this.apiService.post<GameScoreApiModel, GameScorePost>(this.apiUrl, postModel, {
+      // Bypass http-options preflight for Google app script server
+      headers: {'Content-Type': 'text/plain'}
+    }).pipe(map(data => this.convertScore(data)));
+  }
+
+  private convertScore(score: GameScoreApiModel): GameScore {
+    const gameScore = new GameScore();
+
+    gameScore.id = score.id;
+    gameScore.inning = score.inning;
+    gameScore.scoreA = score.scoreA;
+    gameScore.scoreB = score.scoreB;
+    gameScore.time = new Date(score.time);
+
+    gameScore.playerCount = parseInt(score.theory, 10) === 2 ? 2 : 4;
+    const winner = score.result.toLowerCase();
+    gameScore.winner = winner.includes('a') ? 'a' :
+      winner.includes('b') ? 'b' : 'deuce';
+
+    gameScore.itemsA = this.parseItems(score.itemsA);
+    gameScore.coinsA = this.parseItems(score.newFriendA);
+    gameScore.itemsB = this.parseItems(score.itemsB);
+    gameScore.coinsB = this.parseItems(score.newFriendB);
+
+    return gameScore;
+  }
+
+  private parseItems(itemString: string): AnyObject<number> {
+    return itemString.split('|')
+      .map(itemWithScore => {
+        const splits = itemWithScore.split('×');
+        const itemName = splits[0].trim();
+        const itemCount = parseInt(splits[1], 10) || 1;
+        const orgItem = [...allGameItems, ...allCoinTypes]
+          .find(item => item.name === itemName);
+        return {itemId: n(orgItem).id, count: itemCount};
+      })
+      .filter(itemAndCount => itemAndCount.itemId && itemAndCount.count)
+      .reduce((acc, itemAndCount) => {
+        acc[itemAndCount.itemId] = itemAndCount.count;
+        return acc;
+      }, {} as AnyObject<number>);
   }
 
   private convertItems(gameItems: AnyObject<number>): string {
