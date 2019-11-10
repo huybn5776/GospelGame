@@ -18,7 +18,7 @@ import { GameScoreEffects } from './effects/game-score.effects';
       }
     }),
     EffectsModule.forRoot([LayoutEffects, GameScoreEffects]),
-    StoreDevtoolsModule.instrument({maxAge: 25, logOnly: environment.production}),
+    environment.production ? [] : StoreDevtoolsModule.instrument({maxAge: 25, logOnly: environment.production}),
   ],
 })
 export class AppStoreModule {}
