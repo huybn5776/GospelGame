@@ -130,8 +130,5 @@
       }
     }
   },
-  "defaultProject": "GospelGame",
-  "cli": {
-    "defaultCollection": "@ngrx/schematics"
-  }
+  "defaultProject": "GospelGame"
 }
