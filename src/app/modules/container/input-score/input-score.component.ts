@@ -121,6 +121,8 @@ export class InputScoreComponent implements OnDestroy {
           untilDestroyed(this),
         )
         .subscribe(([_, inning]) => this.saveScore(gameScore, inning));
+    } else {
+      this.focusFirstError();
     }
   }
 
@@ -143,6 +145,14 @@ export class InputScoreComponent implements OnDestroy {
     gameScore.inning = inning;
     this.store.dispatch(GameScoreActions.addScore({gameScore: gameScore}));
     this.reset();
+  }
+
+  focusFirstError() {
+    const invalidElements = this.el.nativeElement.querySelectorAll('.ng-invalid');
+    if (invalidElements[0]) {
+      invalidElements[0].focus();
+      invalidElements[0].scrollIntoView();
+    }
   }
 
   reset() {
