@@ -42,13 +42,15 @@ header {
 
     ::ng-deep .mat-tab-nav-bar.mat-primary .mat-ink-bar {
       background-color: deeppink;
+      transition: .3s;
     }
 
     nav {
       padding-left: 218px;
 
       [mat-tab-link] {
-        font-size: 18px;
+        font-size: 16px;
+        min-width: 100px;
       }
     }
   }
