@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, ElementRef, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { filter, map, withLatestFrom } from 'rxjs/operators';
 import { Observable } from 'rxjs';
@@ -7,6 +7,7 @@ import { MatDialog } from '@angular/material';
 import { Store } from '@ngrx/store';
 import { untilDestroyed } from 'ngx-take-until-destroy';
 import * as R from 'ramda';
+import * as RA from 'ramda-adjunct';
 
 import { AnyObject } from '../../../interface/model/any';
 import { ValidationService } from '../../../services/validation.service';
@@ -16,7 +17,7 @@ import { GameStatus } from '../../../entities/game-status';
 import { ConfirmDialogComponent } from '../../shared/common/confirm-dialog/confirm-dialog.component';
 import { ConfirmDialogConfig } from '../../../entities/confirm-dialog-config';
 import { GameItemInfo } from '../../../entities/game-item-info';
-import { allGameItems, allCoinTypes } from '../../../constants/all-game-items';
+import { allCoinTypes, allGameItems } from '../../../constants/all-game-items';
 import { RootState } from '../../../store/reducers';
 import { GameScoreActions } from '../../../store/actions';
 import { fromGameScore } from '../../../store/selectors';
@@ -44,6 +45,7 @@ export class InputScoreComponent implements OnDestroy {
   nextGameInningNumber$: Observable<number>;
 
   constructor(
+    private readonly el: ElementRef,
     private readonly formBuilder: FormBuilder,
     private readonly validationService: ValidationService,
     private readonly gameScoreCalcService: GameScoreCalcService,
@@ -111,30 +113,36 @@ export class InputScoreComponent implements OnDestroy {
     if (this.formGroup.valid) {
       const gameStatus: GameStatus = this.formGroup.value;
       const gameScore = this.gameScoreCalcService.calcScore(gameStatus);
-      const dialogRef = this.dialog.open<ConfirmDialogComponent, ConfirmDialogConfig, boolean>(ConfirmDialogComponent, {
-        data: {
-          title: '遊戲分數',
-          message:
-            `A隊: ${gameScore.scoreA}\n` +
-            `B隊: ${gameScore.scoreB}\n`,
-          okLabel: '送出分數'
-        },
-      });
+      const dialogRef = this.openDialog(gameScore);
       dialogRef.afterClosed()
         .pipe(
-          filter(ok => ok),
+          filter(RA.isTruthy),
           withLatestFrom(this.nextGameInningNumber$),
           untilDestroyed(this),
         )
-        .subscribe(([_, inning]) => {
-          gameScore.time = new Date();
-          // "id" and "inning" value will generate by backend api, set those here is just for save to store before posting data.
-          gameScore.id = new Date().getTime();
-          gameScore.inning = inning;
-          this.store.dispatch(GameScoreActions.addScore({gameScore: gameScore}));
-          this.reset();
-        });
+        .subscribe(([_, inning]) => this.saveScore(gameScore, inning));
     }
+  }
+
+  openDialog(gameScore) {
+    return this.dialog.open<ConfirmDialogComponent, ConfirmDialogConfig, boolean>(ConfirmDialogComponent, {
+      data: {
+        title: '遊戲分數',
+        message:
+          `A隊: ${gameScore.scoreA}\n` +
+          `B隊: ${gameScore.scoreB}\n`,
+        okLabel: '送出分數'
+      },
+    });
+  }
+
+  saveScore(gameScore, inning) {
+    gameScore.time = new Date();
+    // "id" and "inning" value will generate by backend api, set those here is just for save to store before posting data.
+    gameScore.id = new Date().getTime();
+    gameScore.inning = inning;
+    this.store.dispatch(GameScoreActions.addScore({gameScore: gameScore}));
+    this.reset();
   }
 
   reset() {
@@ -144,5 +152,4 @@ export class InputScoreComponent implements OnDestroy {
   }
 
   ngOnDestroy() { }
-
 }
