@@ -1,0 +1,24 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>基本規則</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <p>2人賽: 贏家 200分，輸家100分，平手各100分。</p>
+    <p>4人賽: 贏家 400分，輸家200分，平手各300分。</p>
+    <p>當局遊戲結束後，每位參加者各抽一張道具，若是新朋友則可多抽一張金幣作分數加成。</p>
+  </mat-card-content>
+</mat-card>
+
+<mat-card class="rules-item">
+  <mat-card-header>
+    <mat-card-title>道具</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <p>能改變分數加乘數，初始值為 ×1</p>
+    <p>道具僅應用到當局分數，金幣分數會在套用道具效果後再加上。</p>
+    <div *ngFor="let item of items" class="item-view">
+      <img [src]="item.src" [alt]="item.name">
+      <span>{{item.name}}: {{item.desc}}</span>
+    </div>
+  </mat-card-content>
+</mat-card>

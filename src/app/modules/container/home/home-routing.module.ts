@@ -17,6 +17,10 @@ const routes: Routes = [
         loadChildren: () => import('./../final-result/final-result.module').then(m => m.FinalResultModule),
       },
       {
+        path: 'scoring-rules',
+        loadChildren: () => import('./../scoring-rules/scoring-rules.module').then(m => m.ScoringRulesModule),
+      },
+      {
         path: '**',
         redirectTo: 'input-score',
         pathMatch: 'full'

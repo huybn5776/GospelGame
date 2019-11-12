@@ -1,0 +1,31 @@
+mat-card + mat-card {
+  margin-top: 12px;
+}
+
+mat-card-content {
+  p {
+    font-size: 15px;
+  }
+}
+
+.rules-item {
+  .item-view {
+    display: flex;
+    align-items: center;
+
+    img {
+      width: 48px;
+      height: 48px;
+      object-fit: contain;
+    }
+
+    span {
+      margin-left: 6px;
+      font-size: 16px;
+    }
+
+    :not(:last-child) {
+      margin-bottom: 8px;
+    }
+  }
+}
