@@ -3,4 +3,5 @@ export class GameItemInfo {
   name: string;
   src: string;
   seq: number;
+  desc?: string;
 }
