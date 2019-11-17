@@ -116,9 +116,9 @@ function writeNewData(data) {
 }
 
 function getNextInning() {
-  const inningColumnIndex = 2;
+  var inningColumnIndex = getColumnIndexOf('inning');
   const values = sheet1.getSheetValues(sheet1.getLastRow(), inningColumnIndex, 1, 1);
-  const lastInning = parseInt(values[0]);
+  const lastInning = parseInt(values[0]) || 0;
   return lastInning + 1;
 }
 
