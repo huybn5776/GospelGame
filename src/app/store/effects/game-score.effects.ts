@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { catchError, exhaustMap, filter, map, switchMap, take, tap } from 'rxjs/operators';
-import { of } from 'rxjs';
+import { catchError, exhaustMap, filter, map, switchMap, take, takeUntil, tap } from 'rxjs/operators';
+import { merge, of } from 'rxjs';
 
 import { Store } from '@ngrx/store';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
@@ -24,6 +24,10 @@ export class GameScoreEffects {
         this.gameScoreService.getScores().pipe(
           map(gameScores => GameScoreActions.loadAllSuccess({gameScores})),
           catchError(err => of(GameScoreActions.loadFail({errorMsg: err.message}))),
+          takeUntil(merge(
+            this.actions$.pipe(ofType(GameScoreActions.updateOne)),
+            this.actions$.pipe(ofType(GameScoreActions.removeOne)),
+          )),
         )
       ),
     ));
