@@ -1,4 +1,5 @@
 export class GameScorePost {
+  id: number;
   theory: string;
   result: string;
   newFriendA: string;

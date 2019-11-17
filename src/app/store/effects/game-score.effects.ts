@@ -53,12 +53,30 @@ export class GameScoreEffects {
         return this.gameScoreService.postScore(gameScore).pipe(
           tap(gameScoreFromServer => {
             const update = ({gameScore: {id: gameScore.id, changes: gameScoreFromServer}});
-            this.store.dispatch(GameScoreActions.updateScore(update));
+            this.store.dispatch(GameScoreActions.updateOne(update));
           })
         );
       }),
       map(() => GameScoreActions.addScoreSuccess()),
       catchError(err => onEffectError(err, GameScoreActions.addScoreFail)),
+    ));
+
+  // noinspection JSUnusedGlobalSymbols
+  removeOne$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(GameScoreActions.removeOne),
+      switchMap(({id}) => this.gameScoreService.remove(id)),
+      map(() => GameScoreActions.removeOneSuccess()),
+      catchError(err => onEffectError(err, GameScoreActions.removeOneFail)),
+    ));
+
+  // noinspection JSUnusedGlobalSymbols
+  updateOne$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(GameScoreActions.updateOne),
+      switchMap(({gameScore}) => this.gameScoreService.update(gameScore.changes)),
+      map(() => GameScoreActions.updateOneSuccess()),
+      catchError(err => onEffectError(err, GameScoreActions.updateOneFail)),
     ));
 
   constructor(

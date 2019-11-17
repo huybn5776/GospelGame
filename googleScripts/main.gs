@@ -1,5 +1,8 @@
 var spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
 var sheet1 = spreadsheet.getSheets()[0];
+var rowStartIndex = 3;
+var colStartIndex = 1;
+var idColIndex = 1;
 
 function doGet(request) {
   const result = getAllData();
@@ -7,10 +10,77 @@ function doGet(request) {
 }
 
 function doPost(request) {
+  const method = request.parameter.method || 'post';
   const postData = JSON.parse(request.postData.contents);
-  const data = writeNewData(postData);
-  spreadsheet.toast("A隊: " + data.scoreA + ", B隊: " + data.scoreA, "新分數");
-  return createResponse(data);
+  var result;
+  switch (method) {
+    case 'post':
+      const data = writeNewData(postData);
+      spreadsheet.toast("A隊: " + data.scoreA + ", B隊: " + data.scoreA, "新分數");
+      result = data;
+      break;
+    case 'patch':
+      result = doPatch(postData);
+      break;
+    case 'delete':
+      result = doDelete(postData);
+      break;
+  }
+  return createResponse(result);
+}
+
+function testDelete() {
+  const result = doDelete({id: 96});
+  Logger.log(result);
+}
+
+function doDelete(postData) {
+  const rowIndex = findRowIndexWithData(postData);
+  if (rowIndex !== -1) {
+    sheet1.deleteRow(rowIndex);
+    return {ok: true, code: 204};
+  }
+  return {ok: false, code: 404};
+}
+
+function testPatch() {
+  const result = doPatch({id: 94, scoreA: 123});
+  Logger.log(result);
+}
+
+function doPatch(postData) {
+  const rowIndex = findRowIndexWithData(postData);
+  const range = sheet1.getRange(rowIndex, 1, 1, sheet1.getLastColumn());
+  const rowData = range.getValues()[0];
+
+  const dataKeyIndex = getDateKeyIndex(sheet1);
+  for (var i = 0; i < dataKeyIndex.length; i++) {
+    var patchValue = postData[dataKeyIndex[i]];
+    if (patchValue) {
+      rowData[i] = patchValue;
+    }
+  }
+  range.setValues([rowData]);
+
+  const newData = new Object();
+  for (var i = 0; i < dataKeyIndex.length; i++) {
+    newData[dataKeyIndex[i]] = rowData[i];
+  }
+  return newData;
+}
+
+function findRowIndexWithData(postData) {
+  const dataId = parseInt(postData.id);
+  const lastRow = sheet1.getLastRow();
+  for (var rowIndex = rowStartIndex; rowIndex <= lastRow; rowIndex++) {
+    var idValue = sheet1.getRange(rowIndex, idColIndex, 1, 1).getValues()[0][0];
+    var rowId = parseInt(idValue);
+    if (rowId === dataId) {
+      return rowIndex;
+    }
+    Logger.log(rowId);
+  }
+  return -1;
 }
 
 function testToast() {
@@ -52,24 +122,34 @@ function getNextInning() {
   return lastInning + 1;
 }
 
+function getColumnIndexOf(key) {
+  const dataKeyIndex = getDateKeyIndex(sheet1);
+  var columnIndex;
+  for (var i = 0; i < dataKeyIndex.length; i++) {
+    if (dataKeyIndex[i] === key) {
+      columnIndex = i + 1;
+    }
+  }
+  return columnIndex;
+}
+
 function writeDataToSheet(data, sheet) {
-  const firstRange = sheet.getRange(1, 1, 1, sheet.getLastColumn());
-  const firstRowValues = firstRange.getValues();
-  const titleColumns = firstRowValues[0];
+  const dataKeyIndex = getDateKeyIndex(sheet);
   const rowData = [];
-  for (var i = 0; i < titleColumns.length; i++) {
-    rowData[i] = data[titleColumns[i]];
+  for (var i = 0; i < dataKeyIndex.length; i++) {
+    rowData[i] = data[dataKeyIndex[i]];
   }
   sheet1.appendRow(rowData);
 }
 
-function convertSheet2JsonText(sheet) {
-  const rowStartIndex = 3;
-  const colStartIndex = 1;
-
+function getDateKeyIndex(sheet) {
   const firstRange = sheet.getRange(1, 1, 1, sheet.getLastColumn());
   const firstRowValues = firstRange.getValues();
-  const titleColumns = firstRowValues[0];
+  return firstRowValues[0];
+}
+
+function convertSheet2JsonText(sheet) {
+  const dataKeyIndex = getDateKeyIndex(sheet);
 
   // after the second line(data)
   const lastRow = sheet.getLastRow();
@@ -85,8 +165,8 @@ function convertSheet2JsonText(sheet) {
   for (var i = 0; i < rowValues.length; i++) {
     var line = rowValues[i];
     var json = new Object();
-    for (var j = 0; j < titleColumns.length; j++) {
-      json[titleColumns[j]] = line[j];
+    for (var j = 0; j < dataKeyIndex.length; j++) {
+      json[dataKeyIndex[j]] = line[j];
     }
     jsonArray.push(json);
   }

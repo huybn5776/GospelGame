@@ -32,9 +32,15 @@ const reducer = createReducer(
     GameScoreActions.addScoreSuccess,
     GameScoreActions.addScoreFail,
     GameScoreActions.loadFail,
+    GameScoreActions.updateOneSuccess,
+    GameScoreActions.updateOneFail,
+    GameScoreActions.removeOneSuccess,
+    GameScoreActions.removeOneFail,
     state => ({...state, loading: false})),
-  on(GameScoreActions.updateScore, (state, {gameScore}) => adapter.updateOne(gameScore, state)),
-  on(GameScoreActions.removeScore, (state, {id}) => adapter.removeOne(id, state)),
+
+  on(GameScoreActions.updateOne,
+    (state, {gameScore}) => ({...adapter.updateOne(gameScore, state), loading: true})),
+  on(GameScoreActions.removeOne, (state, {id}) => ({...adapter.removeOne(id, state), loading: true})),
   on(GameScoreActions.removeAllScore, state => adapter.removeAll(state)),
 );
 

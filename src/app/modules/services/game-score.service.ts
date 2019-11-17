@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 
 import * as R from 'ramda';
 
@@ -20,6 +20,8 @@ export class GameScoreService {
 
   readonly gameItemLookup: AnyObject<GameItemInfo>;
   readonly apiUrl = SERVER_URLS.scoreApi;
+  // Bypass http-options preflight for Google app script server
+  readonly postOption = {headers: {'Content-Type': 'text/plain'}};
 
   constructor(
     private readonly apiService: ApiService,
@@ -33,8 +35,33 @@ export class GameScoreService {
   }
 
   postScore(gameScore: GameScore): Observable<GameScore> {
+    const postModel = this.toPostModel(gameScore);
+
+    return this.apiService.post<GameScoreApiModel, GameScorePost>(this.apiUrl, postModel, this.postOption)
+      .pipe(map(data => this.convertScore(data)));
+  }
+
+  update(gameScore: Partial<GameScore>): Observable<GameScore> {
+    const postModel = this.toPostModel(gameScore);
+    return this.apiService.post <GameScoreApiModel, GameScorePost>(this.apiUrl, {...postModel},
+      {...this.postOption, params: {method: 'patch'}})
+      .pipe(map(data => this.convertScore(data)));
+  }
+
+  remove(id: number): Observable<any> {
+    return this.apiService.post<{ ok: boolean, code: number }, { id: number }>(this.apiUrl, {id},
+      {...this.postOption, params: {method: 'delete'}})
+      .pipe(tap(result => {
+        if (result.ok === false) {
+          throw result;
+        }
+      }));
+  }
+
+  private toPostModel(gameScore: GameScore  | Partial<GameScore>) {
     const postModel = new GameScorePost();
 
+    postModel.id = gameScore.id;
     postModel.theory = {'2': '2人賽', '4': '4人賽'}[gameScore.playerCount];
     postModel.result = {'a': 'A隊贏', 'b': 'B隊贏', 'deuce': '平手'}[gameScore.winner];
     postModel.itemsA = this.convertItems(gameScore.itemsA);
@@ -44,11 +71,7 @@ export class GameScoreService {
     postModel.scoreA = gameScore.scoreA;
     postModel.scoreB = gameScore.scoreB;
     postModel.time = gameScore.time;
-
-    return this.apiService.post<GameScoreApiModel, GameScorePost>(this.apiUrl, postModel, {
-      // Bypass http-options preflight for Google app script server
-      headers: {'Content-Type': 'text/plain'}
-    }).pipe(map(data => this.convertScore(data)));
+    return postModel;
   }
 
   private convertScore(score: GameScoreApiModel): GameScore {
