@@ -31,5 +31,5 @@ export const selectScoreLoading = createSelector(
 export const selectNextInning = createSelector(
   selectAllGameScores,
   selectTotalGameScores,
-  (gameScores: GameScore[], total) => gameScores[total - 1].inning + 1,
+  (gameScores: GameScore[], total) => ((n(gameScores[total - 1]).inning) || 0) + 1,
 );
