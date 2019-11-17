@@ -16,7 +16,7 @@ import { fromGameScore } from '../../../store/selectors';
 })
 export class FinalResultComponent implements OnInit {
 
-  displayedColumns: string[] = ['inning', 'time', 'playerCount', 'winner', 'itemsA', 'itemsB', 'coins', 'scores'];
+  displayedColumns: string[] = ['inning', 'time', 'playerCount', 'winner', 'itemsA', 'itemsB', 'coins', 'scores', 'actions'];
 
   gameScores$: Observable<GameScore[]>;
   gameScoresLoading$: Observable<boolean>;
@@ -35,5 +35,9 @@ export class FinalResultComponent implements OnInit {
 
   asScore(gameScore): GameScore {
     return gameScore;
+  }
+
+  delete(id: number) {
+    this.store.dispatch(GameScoreActions.removeOne({id}));
   }
 }

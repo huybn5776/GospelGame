@@ -48,6 +48,14 @@
       <td mat-cell *matCellDef="let score">{{asScore(score).scoreA}} / {{asScore(score).scoreB}}</td>
     </ng-container>
 
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let score" class="score-actions">
+        <button mat-icon-button (click)="delete(asScore(score).id)">
+          <mat-icon>delete</mat-icon>
+        </button>
+    </ng-container>
+
     <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
     <!--suppress JSUnusedGlobalSymbols -->
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
