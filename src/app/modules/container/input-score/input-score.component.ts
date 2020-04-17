@@ -1,13 +1,13 @@
-import { Component, ElementRef, OnDestroy } from '@angular/core';
+import { Component, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { filter, map, withLatestFrom } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
-import { MatDialog } from '@angular/material';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { Store } from '@ngrx/store';
-import { untilDestroyed } from 'ngx-take-until-destroy';
 import * as R from 'ramda';
 import * as RA from 'ramda-adjunct';
+import { MatDialog } from '@angular/material/dialog';
 
 import { AnyObject } from '../../../interface/model/any';
 import { ValidationService } from '../../../services/validation.service';
@@ -22,12 +22,13 @@ import { RootState } from '../../../store/reducers';
 import { GameScoreActions } from '../../../store/actions';
 import { fromGameScore } from '../../../store/selectors';
 
+@UntilDestroy()
 @Component({
   selector: 'app-input-score',
   templateUrl: './input-score.component.html',
   styleUrls: ['./input-score.component.scss']
 })
-export class InputScoreComponent implements OnDestroy {
+export class InputScoreComponent {
 
   formGroup: FormGroup;
   submitAttempt = false;
@@ -68,17 +69,17 @@ export class InputScoreComponent implements OnDestroy {
     this.formGroup.statusChanges
       .pipe(filter(() => this.submitAttempt), untilDestroyed(this))
       .subscribe(() => this.updateErrors());
-    this.formGroup.controls['playerCount'].valueChanges
+    this.formGroup.get('playerCount').valueChanges
       .pipe(untilDestroyed(this))
       .subscribe(playerCount => this.updateItemCountValidator(playerCount));
 
-    this.teamAItemsCount$ = this.formGroup.controls['itemsA'].valueChanges
+    this.teamAItemsCount$ = this.formGroup.get('itemsA').valueChanges
       .pipe(map(items => this.getValueCount(items)));
-    this.teamBItemsCount$ = this.formGroup.controls['itemsB'].valueChanges
+    this.teamBItemsCount$ = this.formGroup.get('itemsB').valueChanges
       .pipe(map(items => this.getValueCount(items)));
-    this.teamACoinCount$ = this.formGroup.controls['coinsA'].valueChanges
+    this.teamACoinCount$ = this.formGroup.get('coinsA').valueChanges
       .pipe(map(items => this.getValueCount(items)));
-    this.teamBCoinCount$ = this.formGroup.controls['coinsB'].valueChanges
+    this.teamBCoinCount$ = this.formGroup.get('coinsB').valueChanges
       .pipe(map(items => this.getValueCount(items)));
   }
 
@@ -89,13 +90,13 @@ export class InputScoreComponent implements OnDestroy {
   updateItemCountValidator(playerCount: number) {
     this.availableItemsCount = playerCount;
     if (this.availableItemsCount) {
-      this.formGroup.controls['itemsA']
+      this.formGroup.get('itemsA')
         .setValidators(InputValidator.itemCount(this.availableItemsCount));
-      this.formGroup.controls['itemsB']
+      this.formGroup.get('itemsB')
         .setValidators(InputValidator.itemCount(this.availableItemsCount));
-      this.formGroup.controls['coinsA']
+      this.formGroup.get('coinsA')
         .setValidators(InputValidator.itemCount(this.availableItemsCount, 0));
-      this.formGroup.controls['coinsB']
+      this.formGroup.get('coinsB')
         .setValidators(InputValidator.itemCount(this.availableItemsCount, 0));
       ['itemsA', 'itemsB', 'coinsA', 'coinsB']
         .forEach(name => this.formGroup.controls[name].updateValueAndValidity());
@@ -160,6 +161,4 @@ export class InputScoreComponent implements OnDestroy {
     this.formErrors = {};
     this.submitAttempt = false;
   }
-
-  ngOnDestroy() { }
 }
