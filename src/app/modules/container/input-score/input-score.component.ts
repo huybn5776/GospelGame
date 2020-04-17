@@ -21,6 +21,7 @@ import { allCoinTypes, allGameItems } from '../../../constants/all-game-items';
 import { RootState } from '../../../store/reducers';
 import { GameScoreActions } from '../../../store/actions';
 import { fromGameScore } from '../../../store/selectors';
+import { GameScore } from '../../../entities/game-score';
 
 @UntilDestroy()
 @Component({
@@ -71,7 +72,7 @@ export class InputScoreComponent {
       .subscribe(() => this.updateErrors());
     this.formGroup.get('playerCount').valueChanges
       .pipe(untilDestroyed(this))
-      .subscribe(playerCount => this.updateItemCountValidator(playerCount));
+      .subscribe(playerCount => this.updateItemCountValidator(playerCount as number));
 
     this.teamAItemsCount$ = this.formGroup.get('itemsA').valueChanges
       .pipe(map(items => this.getValueCount(items)));
@@ -127,7 +128,7 @@ export class InputScoreComponent {
     }
   }
 
-  openDialog(gameScore) {
+  openDialog(gameScore: GameScore) {
     return this.dialog.open<ConfirmDialogComponent, ConfirmDialogConfig, boolean>(ConfirmDialogComponent, {
       data: {
         title: '遊戲分數',
@@ -139,12 +140,13 @@ export class InputScoreComponent {
     });
   }
 
-  saveScore(gameScore, inning) {
+  saveScore(gameScore: GameScore, inning: number) {
     gameScore.time = new Date();
-    // "id" and "inning" value will generate by backend api, set those here is just for save to store before posting data.
+    // "id" and "inning" value will generate by backend api,
+    // set those here is just for save to store before posting data.
     gameScore.id = new Date().getTime();
     gameScore.inning = inning;
-    this.store.dispatch(GameScoreActions.addScore({gameScore: gameScore}));
+    this.store.dispatch(GameScoreActions.addScore({gameScore}));
     this.reset();
   }
 
